@@ -16,14 +16,14 @@ Google has not yet implement first meaningful paint in performance api for some 
 Install
 -------------------
 
-``` shell
+``` bash
 npm install first-meaningful-paint
 ```
 
 Usage
 -------------------
 
-``` shell
+``` js
 import FMP from 'first-meaningful-paint';
 
 FMP.getFmp(3000).then((fmp) => {
