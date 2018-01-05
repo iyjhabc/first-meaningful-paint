@@ -13,13 +13,19 @@ What we do
 -------------------
 Google has not yet implement first meaningful paint in performance api for some reason. But we found first meaningful paint is a good way to estimate the first srceen time in our page, which is critical for user experience. We want to monitor user's real first srceen time in production environment. So First-Meaningful-Paint can help you to retrieve this value in a easy way, no matter what structure your web is, React, Jquery or any other.
 
-Get started
+Install
 -------------------
 
 ``` shell
 npm install first-meaningful-paint
+```
 
+Usage
+-------------------
+
+``` shell
 import FMP from 'first-meaningful-paint';
+
 FMP.getFmp(3000).then((fmp) => {
     // do sth with fmp, which is a millisecond value
 });
