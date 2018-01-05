@@ -26,3 +26,6 @@ FMP.getFmp(3000).then((fmp) => {
 ```
 parameter of getFmp is the time to stop observing changes in the page, defualt is 3000 milliseconds. It shoud be bigger than the biggest loading time of your page. 
 
+License
+-------------------
+MIT
