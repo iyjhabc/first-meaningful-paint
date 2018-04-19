@@ -31,19 +31,24 @@ var FMP = function () {
         var observedPoints = [];
         var observer = new window.MutationObserver(function () {
           var innerHeight = window.innerHeight;
+          /**
+           * efficiency bottleneck: Element.getBoundingClientRect()
+           * using DFS to avoid parents/pre-siblings dom rect dectection
+           */
           function getDomMark(dom, level) {
-            var length = dom.children ? dom.children.length : 0;
             var sum = 0;
             var tagName = dom.tagName;
             if (tagName !== 'SCRIPT' && tagName !== 'STYLE' && tagName !== 'META' && tagName !== 'HEAD') {
-              if (dom.getBoundingClientRect && dom.getBoundingClientRect().top < innerHeight) {
-                sum += level * length;
-              }
+              var length = dom.children ? dom.children.length : 0;
               if (length > 0) {
                 var children = dom.children;
-                for (var i = 0; i < length; i++) {
-                  sum += getDomMark(children[i], level + 1);
+                for (var i = length; i > 0; i--) {
+                  sum += getDomMark(children[i - 1], level + 1);
                 }
+              }
+
+              if (sum > 0 || dom.getBoundingClientRect && dom.getBoundingClientRect().top < innerHeight) {
+                sum += level * length;
               }
             }
             return sum;

@@ -17,19 +17,24 @@ class FMP {
       const observedPoints = [];
       const observer = new window.MutationObserver(() => {
         const innerHeight = window.innerHeight;
+        /**
+         * efficiency bottleneck: Element.getBoundingClientRect()
+         * using DFS to avoid parents/pre-siblings dom rect dectection
+         */
         function getDomMark(dom, level) {
-          const length = dom.children ? dom.children.length : 0;
           let sum = 0;
           const tagName = dom.tagName;
           if (tagName !== 'SCRIPT' && tagName !== 'STYLE' && tagName !== 'META' && tagName !== 'HEAD') {
-            if (dom.getBoundingClientRect && dom.getBoundingClientRect().top < innerHeight) {
-              sum += (level * length);
-            }
+            const length = dom.children ? dom.children.length : 0;
             if (length > 0) {
               const children = dom.children;
-              for (let i = 0; i < length; i++) {
-                sum += getDomMark(children[i], level + 1);
+              for (let i = length; i > 0 ; i--) {
+                sum += getDomMark(children[i-1], level + 1);
               }
+            }
+
+            if (sum > 0 || (dom.getBoundingClientRect && dom.getBoundingClientRect().top < innerHeight)) {
+              sum += (level * length);
             }
           }
           return sum;
